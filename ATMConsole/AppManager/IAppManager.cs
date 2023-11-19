@@ -8,4 +8,9 @@ internal interface IAppManager {
 	int ReadPassword();
 	void PasswordStatus(Costumer costumer, int passwordLength);
 	void ShowOptions();
+	int ReadAnswer();
+	void RequireMoneyAmount();
+	int ReadMoneyAmount();
+	void RequirePassword();
+	void ViewBalance(Costumer costumer);
 }
