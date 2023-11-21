@@ -17,24 +17,20 @@ internal class AppManager : IAppManager {
     }
 
     public void Run() {
-		WelcomeMessage();
+		ShowWelcomeMessage();
 		
 		Costumer costumer = new();
-
-		int passwordLength = 0;
-
+		bool wrongPasswordLength = true;
 		int userPassword = 0;
 
-		while (costumer.Password == 0 || passwordLength != 6) {
+		while (costumer.Password == 0 || wrongPasswordLength) {
 			CreatePassword();
 
 			userPassword = ReadPassword();
-
-			passwordLength = _passwordController.CheckPasswordLength(userPassword);
-
+			wrongPasswordLength = _passwordController.CheckPasswordLength(userPassword);
 			costumer.Password = _passwordController.ValidatePassword(userPassword);
 
-			PasswordStatus(costumer, passwordLength);
+			ShowPasswordStatus(costumer, wrongPasswordLength);
 		}
 
 		int userAnswer = 0;
@@ -43,49 +39,63 @@ internal class AppManager : IAppManager {
 			ShowOptions();
 
 			userAnswer = ReadAnswer();
-
 			Options possibleAnswers = (Options)userAnswer;
-
 			int moneyAmount;
-
-			bool passwordEquality = userPassword == costumer.Password;
+			bool passwordEquality = false;
 
 			switch (possibleAnswers) {
 				case Options.Balance:
-					RequirePassword();
+                    while (!passwordEquality)
+                    {
+						RequirePassword();
 
-					userPassword = ReadPassword();
+						userPassword = ReadPassword();
+						passwordEquality = _passwordController.ComparePasswords(costumer, userPassword);
 
-					if (passwordEquality)
-						ViewBalance(costumer);
+						if (passwordEquality)
+							ViewBalance(costumer);
+						else ShowInvalidPassword();
+					}
+
 					break;
 				case Options.Withdraw:
 					RequireMoneyAmount();
 
 					moneyAmount = ReadMoneyAmount();
 
-					RequirePassword();
+                    while (!passwordEquality)
+                    {
+						RequirePassword();
 
-					userPassword = ReadPassword();
+						userPassword = ReadPassword();
+						passwordEquality = _passwordController.ComparePasswords(costumer, userPassword);
 
-					if (passwordEquality)
-						costumer.Balance = _operations.CalculateWithdraw(costumer, moneyAmount);
+						if (passwordEquality)
+							costumer.Balance = _operations.CalculateWithdraw(costumer, moneyAmount);
+						else ShowInvalidPassword();
+                    }
 
 					ViewBalance(costumer);
+
 					break;
 				case Options.Deposit:
 					RequireMoneyAmount();
 
 					moneyAmount = ReadMoneyAmount();
 
-					RequirePassword();
+					while (!passwordEquality) {
+						RequirePassword();
 
-					userPassword = ReadPassword();
+						userPassword = ReadPassword();
+						passwordEquality = _passwordController.ComparePasswords(costumer, userPassword);
 
-					if (passwordEquality)
-						costumer.Balance = _operations.CalculateDeposit(costumer, moneyAmount);
+						if (passwordEquality)
+							costumer.Balance = _operations.CalculateDeposit(costumer, moneyAmount);
+						else ShowInvalidPassword();
+					}
 
 					ViewBalance(costumer);
+
 					break;
 				case Options.Exit:
 					ShowExitMessage();
@@ -100,7 +110,7 @@ internal class AppManager : IAppManager {
 	}
 
 	#region
-	public void WelcomeMessage() {
+	public void ShowWelcomeMessage() {
 		Console.WriteLine("Banco Sofra - Aplicativo Digital");
 	}
 
@@ -114,8 +124,8 @@ internal class AppManager : IAppManager {
 		return userPassword;
 	}
 
-	public void PasswordStatus(Costumer costumer, int passwordLength) {
-		string? passwordMessage = costumer.Password == 0 || passwordLength != 6 ? "Senha Inválida! Crie novamente." : "Senha válida.";
+	public void ShowPasswordStatus(Costumer costumer, bool wrongPasswordLength) {
+		string? passwordMessage = costumer.Password == 0 || wrongPasswordLength ? "Senha Inválida! Crie novamente." : "Senha válida.";
 
 		Console.WriteLine(passwordMessage);
 	}
@@ -150,6 +160,10 @@ internal class AppManager : IAppManager {
 
 	public void ShowExitMessage() {
 		Console.WriteLine("Obrigado por utilizar nosso programa!");
+	}
+
+	public void ShowInvalidPassword() {
+		Console.WriteLine("Senha inválida! Insira-a novamente.");
 	}
 	#endregion
 }

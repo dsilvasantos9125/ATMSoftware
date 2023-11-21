@@ -1,4 +1,6 @@
-﻿namespace ATMLib.Controller; 
+﻿using ATMLib.Model;
+
+namespace ATMLib.Controller; 
 public class PasswordController : IPasswordController {
 	public int ValidatePassword(int userPassword) {
 		int password = userPassword;
@@ -26,7 +28,7 @@ public class PasswordController : IPasswordController {
 		return userPassword;
     }
 
-	public int CheckPasswordLength(int userPassword) {
+	public bool CheckPasswordLength(int userPassword) {
 		int passwordLength = 0;
 
 		while (userPassword != 0)
@@ -36,6 +38,14 @@ public class PasswordController : IPasswordController {
 			passwordLength++;
         }
 
-        return passwordLength;
+		bool wrongPasswordLength = passwordLength != 6;
+
+        return wrongPasswordLength;
+	}
+
+	public bool ComparePasswords(Costumer costumer, int userPassword) {
+		bool passwordEquality = costumer.Password == userPassword;
+
+		return passwordEquality;
 	}
 }

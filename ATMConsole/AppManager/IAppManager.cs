@@ -3,14 +3,15 @@
 namespace ATMConsole; 
 internal interface IAppManager {
 	void Run();
-	void WelcomeMessage();
+	void ShowWelcomeMessage();
 	void CreatePassword();
 	int ReadPassword();
-	void PasswordStatus(Costumer costumer, int passwordLength);
+	void ShowPasswordStatus(Costumer costumer, bool passwordLengthSurpass);
 	void ShowOptions();
 	int ReadAnswer();
 	void RequireMoneyAmount();
 	int ReadMoneyAmount();
 	void RequirePassword();
 	void ViewBalance(Costumer costumer);
+	void ShowInvalidPassword();
 }
