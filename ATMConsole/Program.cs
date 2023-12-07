@@ -1,17 +1,25 @@
 ﻿using ATMConsole;
 using ATMLib.Controller;
 using ATMLib.Operation;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ATMSoftware;
 internal class Program {
-	static void Main(string[] args) {
-		IPasswordController _passwordController = new PasswordController();
-		IOperations _operations = new Operations();
-		IAppManager appManager = new AppManager(
-			_passwordController,
-			_operations
-			);
+	static void Main() {
+		using ServiceProvider container = RegistrarClasses();
 
-		appManager.Run();
+		var controller = container.GetRequiredService<IAppManager>();
+
+		controller.Run();
+	}
+
+	static ServiceProvider RegistrarClasses() {
+		var services = new ServiceCollection();
+
+		services.AddSingleton<IPasswordController, PasswordController>();
+		services.AddSingleton<IOperations, Operations>();
+		services.AddSingleton<IAppManager, AppManager>();
+
+		return services.BuildServiceProvider();
 	}
 }

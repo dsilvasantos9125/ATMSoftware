@@ -3,25 +3,25 @@ using ATMLib.Enum;
 using ATMLib.Model;
 using ATMLib.Operation;
 
-namespace ATMConsole; 
+namespace ATMConsole;
 internal class AppManager : IAppManager {
 	private readonly IPasswordController _passwordController;
 	private readonly IOperations _operations;
 
-    public AppManager(
-		IPasswordController passwordController, 
+	public AppManager(
+		IPasswordController passwordController,
 		IOperations operations
 		) {
-        _passwordController = passwordController;
+		_passwordController = passwordController;
 		_operations = operations;
-    }
+	}
 
-    public void Run() {
+	public void Run() {
 		ShowWelcomeMessage();
-		
+
 		Costumer costumer = new();
 		bool wrongPasswordLength = true;
-		int userPassword = 0;
+		int userPassword;
 
 		while (costumer.Password == 0 || wrongPasswordLength) {
 			CreatePassword();
@@ -35,7 +35,7 @@ internal class AppManager : IAppManager {
 
 		int userAnswer = 0;
 
-		while(userAnswer != 4) {
+		while (userAnswer != 4) {
 			ShowOptions();
 
 			userAnswer = ReadAnswer();
@@ -45,8 +45,7 @@ internal class AppManager : IAppManager {
 
 			switch (possibleAnswers) {
 				case Options.Balance:
-                    while (!passwordEquality)
-                    {
+					while (!passwordEquality) {
 						RequirePassword();
 
 						userPassword = ReadPassword();
@@ -63,8 +62,7 @@ internal class AppManager : IAppManager {
 
 					moneyAmount = ReadMoneyAmount();
 
-                    while (!passwordEquality)
-                    {
+					while (!passwordEquality) {
 						RequirePassword();
 
 						userPassword = ReadPassword();
@@ -73,7 +71,7 @@ internal class AppManager : IAppManager {
 						if (passwordEquality)
 							costumer.Balance = _operations.CalculateWithdraw(costumer, moneyAmount);
 						else ShowInvalidPassword();
-                    }
+					}
 
 					ViewBalance(costumer);
 
@@ -119,7 +117,7 @@ internal class AppManager : IAppManager {
 	}
 
 	public int ReadPassword() {
-		int userPassword = int.Parse(Console.ReadLine());
+		int userPassword = int.Parse(Console.ReadLine() ?? "0");
 
 		return userPassword;
 	}
@@ -135,7 +133,7 @@ internal class AppManager : IAppManager {
 	}
 
 	public int ReadAnswer() {
-		int answer = int.Parse(Console.ReadLine());
+		int answer = int.Parse(Console.ReadLine() ?? "0");
 
 		return answer;
 	}
