@@ -3,7 +3,10 @@
 namespace ATMLib.Controller; 
 public class PasswordController : IPasswordController {
 	public int ValidatePassword(int userPassword) {
-		int password = userPassword;
+
+        if (!CheckPasswordLength(userPassword)) return 0;
+		
+        int password = userPassword;
 
         for (int i = 0; i < 6; i++) {
 			int repetitions = 0;
@@ -15,9 +18,11 @@ public class PasswordController : IPasswordController {
 			while (password != 0) {
                 int comparableNumber = password % 10;
 
-				if (comparableNumber == actualNumber) repetitions++;
+				if (comparableNumber == actualNumber) 
+					repetitions++;
 
-				if (repetitions >= 2) return 0;
+				if (repetitions >= 2) 
+					return 0;
 
 				password /= 10;
 			}
@@ -28,24 +33,9 @@ public class PasswordController : IPasswordController {
 		return userPassword;
     }
 
-	public bool CheckPasswordLength(int userPassword) {
-		int passwordLength = 0;
+	public bool ComparePasswords(Costumer costumer, int userPassword) =>
+		costumer.Password == userPassword;
 
-		while (userPassword != 0)
-        {
-			userPassword /= 10;
-
-			passwordLength++;
-        }
-
-		bool wrongPasswordLength = passwordLength != 6;
-
-        return wrongPasswordLength;
-	}
-
-	public bool ComparePasswords(Costumer costumer, int userPassword) {
-		bool passwordEquality = costumer.Password == userPassword;
-
-		return passwordEquality;
-	}
+	private static bool CheckPasswordLength(int userPassword) =>
+		userPassword.ToString().Length == 6;
 }

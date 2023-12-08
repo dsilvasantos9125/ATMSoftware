@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ATMConsole", "ATMConsole\AT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ATMLib", "ATMLib\ATMLib.csproj", "{571C180C-017E-44EA-AE33-9FE0FEB628B6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{885B8757-AB0B-414F-AABC-172D659B06AE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ATMConsole", "ATMConsole", "{7EE904AD-7C77-4C30-830C-76208B3A7D50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ATMLibTests", "ATMLibTests\ATMLibTests.csproj", "{471292CE-CB10-4F7C-AABF-F54386366757}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,9 +25,18 @@ Global
 		{571C180C-017E-44EA-AE33-9FE0FEB628B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{571C180C-017E-44EA-AE33-9FE0FEB628B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{571C180C-017E-44EA-AE33-9FE0FEB628B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{471292CE-CB10-4F7C-AABF-F54386366757}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{471292CE-CB10-4F7C-AABF-F54386366757}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{471292CE-CB10-4F7C-AABF-F54386366757}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{471292CE-CB10-4F7C-AABF-F54386366757}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1F5C6A8B-104D-467F-9CF4-176A89A2F296} = {7EE904AD-7C77-4C30-830C-76208B3A7D50}
+		{571C180C-017E-44EA-AE33-9FE0FEB628B6} = {7EE904AD-7C77-4C30-830C-76208B3A7D50}
+		{471292CE-CB10-4F7C-AABF-F54386366757} = {7EE904AD-7C77-4C30-830C-76208B3A7D50}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {841DB3BE-E1EF-4C88-81E1-8344BEE36794}

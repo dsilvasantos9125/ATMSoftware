@@ -6,19 +6,19 @@ using Microsoft.Extensions.DependencyInjection;
 namespace ATMSoftware;
 internal class Program {
 	static void Main() {
-		using ServiceProvider container = RegistrarClasses();
+		using ServiceProvider container = RegisterClasses();
 
-		var controller = container.GetRequiredService<IAppManager>();
+		IAppManager controller = container.GetRequiredService<IAppManager>();
 
 		controller.Run();
 	}
 
-	static ServiceProvider RegistrarClasses() {
-		var services = new ServiceCollection();
+	static ServiceProvider RegisterClasses() {
+		ServiceCollection services = new();
 
-		services.AddSingleton<IPasswordController, PasswordController>();
-		services.AddSingleton<IOperations, Operations>();
-		services.AddSingleton<IAppManager, AppManager>();
+		services.AddTransient<IPasswordController, PasswordController>();
+		services.AddTransient<IOperations, Operations>();
+		services.AddTransient<IAppManager, AppManager >();
 
 		return services.BuildServiceProvider();
 	}

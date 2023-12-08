@@ -6,7 +6,7 @@ internal interface IAppManager {
 	void ShowWelcomeMessage();
 	void CreatePassword();
 	int ReadPassword();
-	void ShowPasswordStatus(Costumer costumer, bool passwordLengthSurpass);
+	void ShowPasswordStatus(Costumer costumer);
 	void ShowOptions();
 	int ReadAnswer();
 	void RequireMoneyAmount();
