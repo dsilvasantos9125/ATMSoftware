@@ -2,6 +2,7 @@
 using ATMLib.Controller;
 using ATMLib.Operation;
 using Microsoft.Extensions.DependencyInjection;
+using SharedLibrary;
 
 namespace ATMSoftware;
 internal class Program {
@@ -19,6 +20,7 @@ internal class Program {
 		services.AddTransient<IPasswordController, PasswordController>();
 		services.AddTransient<IOperations, Operations>();
 		services.AddTransient<IAppManager, AppManager >();
+		services.AddTransient<ISharedConsole, SharedConsole>();
 
 		return services.BuildServiceProvider();
 	}

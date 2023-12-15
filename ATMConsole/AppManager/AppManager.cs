@@ -2,36 +2,31 @@
 using ATMLib.Enum;
 using ATMLib.Model;
 using ATMLib.Operation;
+using SharedLibrary;
 
 namespace ATMConsole;
 internal class AppManager : IAppManager {
 	private readonly IPasswordController _passwordController;
 	private readonly IOperations _operations;
+	private readonly ISharedConsole _sharedConsole;
 
 	public AppManager(
 		IPasswordController passwordController,
-		IOperations operations
+		IOperations operations,
+		ISharedConsole sharedConsole
 		) {
 		_passwordController = passwordController;
 		_operations = operations;
+		_sharedConsole = sharedConsole;
 	}
 
 	public void Run() {
 		ShowWelcomeMessage();
 
 		Costumer costumer = new();
-		int userPassword;
-
-		while (costumer.Password == 0) {
-			CreatePassword();
-
-			userPassword = ReadPassword();
-			costumer.Password = _passwordController.ValidatePassword(userPassword);
-
-			ShowPasswordStatus(costumer);
-		}
-
 		int userAnswer = 0;
+
+		CreatePassword(costumer);
 
 		while (userAnswer != 4) {
 			ShowOptions();
@@ -39,7 +34,6 @@ internal class AppManager : IAppManager {
 			userAnswer = ReadAnswer();
 			Options possibleAnswers = (Options)userAnswer;
 			int moneyAmount;
-			bool passwordEquality = false;
 
 			switch (possibleAnswers) {
 				case Options.Balance:
@@ -48,9 +42,7 @@ internal class AppManager : IAppManager {
 
 					break;
 				case Options.Withdraw:
-					RequireMoneyAmount();
-
-					moneyAmount = ReadMoneyAmount();
+					LoadMoneyAmount(out moneyAmount);
 
 					if (WhileReadPassword(costumer)) {
 						_operations.CalculateWithdraw(costumer, moneyAmount);
@@ -59,9 +51,7 @@ internal class AppManager : IAppManager {
 
 					break;
 				case Options.Deposit:
-					RequireMoneyAmount();
-
-					moneyAmount = ReadMoneyAmount();
+					LoadMoneyAmount(out moneyAmount);
 
 					if (WhileReadPassword(costumer)) {
 						_operations.CalculateDeposit(costumer, moneyAmount);
@@ -83,57 +73,42 @@ internal class AppManager : IAppManager {
 
 	#region
 	public void ShowWelcomeMessage() {
-		Console.WriteLine("Banco Sofra - Aplicativo Digital");
+		_sharedConsole.WriteLine("Banco Sofra - Aplicativo Digital");
 	}
 
-	public void CreatePassword() {
-		Console.WriteLine("Crie a sua senha de 6 dígitos (sem repetições de números):");
-	}
+	public void WritePassword() =>
+		_sharedConsole.WriteLine("Crie a sua senha de 6 dígitos (sem repetições de números):");
 
-	public int ReadPassword() {
-		int userPassword = int.Parse(Console.ReadLine() ?? "0");
 
-		return userPassword;
-	}
+	public int ReadPassword() =>
+		int.Parse(_sharedConsole.ReadLine() ?? "0");
 
 	public void ShowPasswordStatus(Costumer costumer) =>
-		Console.WriteLine(costumer.Password == 0 ? "Senha Inválida! Crie novamente." : "Senha válida.");
+		_sharedConsole.WriteLine(costumer.Password == 0 ? "Senha Inválida! Crie novamente." : "Senha válida.");
 
-	public void ShowOptions() {
-		Console.WriteLine("\n1 - Verificar Saldo \n2 - Realizar Saque \n3 - Depositar \n4 - Sair");
-	}
+	public void ShowOptions() => 
+		_sharedConsole.WriteLine("\n1 - Verificar Saldo \n2 - Realizar Saque \n3 - Depositar \n4 - Sair");
 
-	public int ReadAnswer() {
-		int answer = int.Parse(Console.ReadLine() ?? "0");
+	public int ReadAnswer() =>
+		int.Parse(_sharedConsole.ReadLine() ?? "0");
 
-		return answer;
-	}
+	public void RequireMoneyAmount() => 
+		_sharedConsole.WriteLine("Qual será a quantia de dinheiro?");
 
-	public void RequireMoneyAmount() {
-		Console.WriteLine("Qual será a quantia de dinheiro?");
-	}
+	public int ReadMoneyAmount() =>
+		int.Parse(_sharedConsole.ReadLine());
 
-	public int ReadMoneyAmount() {
-		int moneyAmount = int.Parse(Console.ReadLine());
+	public void RequirePassword() => 
+		_sharedConsole.WriteLine("Digite sua senha:");
 
-		return moneyAmount;
-	}
+	public void ViewBalance(Costumer costumer) => 
+		_sharedConsole.WriteLine(String.Format($"O seu saldo é de {costumer.Balance:C}"));
 
-	public void RequirePassword() {
-		Console.WriteLine("Digite sua senha:");
-	}
+	public void ShowExitMessage() => 
+		_sharedConsole.WriteLine("Obrigado por utilizar nosso programa!");
 
-	public void ViewBalance(Costumer costumer) {
-		Console.WriteLine(String.Format($"O seu saldo é de {costumer.Balance:C}"));
-	}
-
-	public void ShowExitMessage() {
-		Console.WriteLine("Obrigado por utilizar nosso programa!");
-	}
-
-	public void ShowInvalidPassword() {
-		Console.WriteLine("Senha inválida! Insira-a novamente.");
-	}
+	public void ShowInvalidPassword() => 
+		_sharedConsole.WriteLine("Senha inválida! Insira-a novamente.");
 
 	public bool WhileReadPassword(Costumer costumer) {
 		bool passwordEquality = false;
@@ -146,6 +121,23 @@ internal class AppManager : IAppManager {
 		}
 
 		return true;
+	}
+
+	public void LoadMoneyAmount(out int moneyAmount) {
+		RequireMoneyAmount();
+
+		moneyAmount = ReadMoneyAmount();
+	}
+
+	public void CreatePassword(Costumer costumer) {
+		while (costumer.Password == 0) {
+			WritePassword();
+
+			int userPassword = ReadPassword();
+			costumer.Password = _passwordController.ValidatePassword(userPassword);
+
+			ShowPasswordStatus(costumer);
+		}
 	}
 	#endregion
 }

@@ -4,7 +4,7 @@ namespace ATMConsole;
 internal interface IAppManager {
 	void Run();
 	void ShowWelcomeMessage();
-	void CreatePassword();
+	void WritePassword();
 	int ReadPassword();
 	void ShowPasswordStatus(Costumer costumer);
 	void ShowOptions();
@@ -14,4 +14,6 @@ internal interface IAppManager {
 	void RequirePassword();
 	void ViewBalance(Costumer costumer);
 	void ShowInvalidPassword();
+	void LoadMoneyAmount(out int moneyAmount);
+	void CreatePassword(Costumer costumer);
 }

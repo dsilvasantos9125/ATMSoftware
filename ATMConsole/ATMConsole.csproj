@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ATMLib\ATMLib.csproj" />
+    <ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj" />
   </ItemGroup>
 
 </Project>
