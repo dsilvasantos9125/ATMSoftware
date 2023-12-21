@@ -3,30 +3,28 @@ using ATMLib.Model;
 
 namespace ATMLibTests.Controller;
 
-public class PasswordControllerTest
-{
-    private PasswordController context;
+public class PasswordControllerTest {
 
-    [SetUp]
-    public void Setup()
-    {
-        context = new();
-    }
+	private PasswordController context;
 
-    [Test]
-    public void ValidatePassword_ReturnsPassword_WhenIsCorrect()
-    {
-        //Arrange
-        int expectedValue = 123456;
+	[SetUp]
+	public void Setup() {
+		context = new();
+	}
 
-        //Act
-        int result = context.ValidatePassword(expectedValue);
+	[Test]
+	public void ValidatePassword_ReturnsPassword_WhenIsCorrect() {
+		//Arrange
+		int expectedValue = 123456;
 
-        //Assert
-        Assert.That(result, Is.EqualTo(expectedValue), "Expected password");
-    }
+		//Act
+		int result = context.ValidatePassword(expectedValue);
 
-    [Test]
+		//Assert
+		Assert.That(result, Is.EqualTo(expectedValue), "Expected password");
+	}
+
+	[Test]
 	public void ValidatePassword_ReturnsZero_WhenIsIncorrect() {
 		//Arrange
 		int expectedValue = 123455;
@@ -38,25 +36,25 @@ public class PasswordControllerTest
 		Assert.That(result, Is.EqualTo(0), "Expected zero");
 	}
 
-    [Test]
-    public void ValidatePassword_ReturnsZero_WhenLengthIsWrong() {
-        //Arrange
-        int expectedValue = 1234567;
+	[Test]
+	public void ValidatePassword_ReturnsZero_WhenLengthIsWrong() {
+		//Arrange
+		int expectedValue = 1234567;
 
-        //Act
-        int result = context.ValidatePassword(expectedValue);
+		//Act
+		int result = context.ValidatePassword(expectedValue);
 
-        //Assert
-        Assert.That(result, Is.EqualTo(0), "Expected zero");
-    }
+		//Assert
+		Assert.That(result, Is.EqualTo(0), "Expected zero");
+	}
 
-    [Test]
-    public void ComparePasswords_ReturnsTrue_WhenPasswordsAreEqual() {
+	[Test]
+	public void ComparePasswords_ReturnsTrue_WhenPasswordsAreEqual() {
 		//Arrange
 		int expectedValue = 123456;
-        Costumer costumer = new() {
-            Password = 123456
-        };
+		Costumer costumer = new() {
+			Password = 123456
+		};
 
 		//Act
 		bool result = context.ComparePasswords(costumer, expectedValue);

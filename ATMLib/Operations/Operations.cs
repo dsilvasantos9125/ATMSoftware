@@ -5,7 +5,6 @@ public class Operations : IOperations {
 	public int GetBalance(Costumer costumer) =>
 		costumer.Balance;
 	
-
 	public int CalculateWithdraw(Costumer costumer, int moneyAmount) =>
 		costumer.Balance -= moneyAmount;
 
